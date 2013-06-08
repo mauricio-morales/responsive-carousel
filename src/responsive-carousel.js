@@ -117,7 +117,7 @@
 			},
 
 			_transitionEnd: function( $from, $to, reverseClass ){
-				var delay = parseFloat($to.css('transition-delay').replace('s')) * 1000;
+				var delay = parseFloat($to.css('transition-delay').replace('s','')) * 1000;
 				$this = $( this ).removeClass( reverseClass ).addClass( 'carousel-no-transition' );
 				
 				setTimeout(function () {
