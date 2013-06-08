@@ -117,7 +117,13 @@
 			},
 
 			_transitionEnd: function( $from, $to, reverseClass ){
-				$( this ).removeClass( reverseClass );
+				var delay = parseFloat($to.css('transition-delay').replace('s')) * 1000;
+				$this = $( this ).removeClass( reverseClass ).addClass( 'carousel-no-transition' );
+				
+				setTimeout(function () {
+					$this.removeClass( 'carousel-no-transition' );
+				}, delay);
+				
 				$from.removeClass( outClass + " " + activeClass );
 				$to.removeClass( inClass ).addClass( activeClass );
 			},
@@ -129,6 +135,7 @@
 						if( targ.length ){
 							$elem[ pluginName ]( targ.is( "[href='#next']" ) ? "next" : "prev" );
 							e.preventDefault();
+							return false;
 						}
 					});
 
