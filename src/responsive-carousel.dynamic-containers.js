@@ -30,7 +30,7 @@
 					$kids.appendTo( $self );
 					$rows.remove();
 				}
-				
+
 				$kids
 					.removeClass( itemClass + " " + activeClass )
 					.each(function(){
@@ -42,14 +42,18 @@
 						
 						sets[ sets.length -1 ].push( $( this ) );
 					});
-				
+
 				for( var i = 0; i < sets.length; i++ ){
 					var $row = $( "<div " + rowAttr + "></div>" );
 					for( var j = 0; j < sets[ i ].length; j++ ){
 						$row.append( sets[ i ][ j ] );
 					}
-					
-					$row.insertBefore( $nav );
+
+					if ($nav.length) {
+					    $row.insertBefore( $nav );
+					} else {
+                        $row.appendTo( $self );
+					}
 				}
 				
 				$self[ pluginName ]( "update" )

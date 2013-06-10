@@ -17,6 +17,8 @@
 		inClass = pluginName + "-in",
 		outClass = pluginName + "-out",
 		navClass =  pluginName + "-nav",
+		prevTemplate = '',
+		nextTemplate = "<nav><a href='#prev' class='prev' aria-hidden='true' title='Previous'>Prev</a><a href='#next' class='next' aria-hidden='true' title='Next'>Next</a></nav>",
 		cssTransitionsSupport = (function(){
 			var prefixes = "webkit Moz O Ms".split( " " ),
 				supported = false,
@@ -62,9 +64,21 @@
 			next: function(){
 				$( this )[ pluginName ]( "goTo", "+1" );
 			},
+			
+			nextTemplate: function( html ) {
+				if (html || html == '') {
+					nextTemplate = html;
+				}
+			},
 
 			prev: function(){
 				$( this )[ pluginName ]( "goTo", "-1" );
+			},
+
+			prevTemplate: function( html ) {
+				if (html || html == '') {
+					prevTemplate = html;
+				}
 			},
 
 			goTo: function( num ){
@@ -131,9 +145,9 @@
 			_bindEventListeners: function(){
 				var $elem = $( this )
 					.bind( "click", function( e ){
-						var targ = $( e.target ).closest( "a[href='#next'],a[href='#prev']" );
+						var targ = $( e.target ).closest( ".next,.prev" );
 						if( targ.length ){
-							$elem[ pluginName ]( targ.is( "[href='#next']" ) ? "next" : "prev" );
+							$elem[ pluginName ]( targ.is( ".next" ) ? "next" : "prev" );
 							e.preventDefault();
 							return false;
 						}
@@ -143,8 +157,11 @@
 			},
 
 			_addNextPrev: function(){
+				// remove if navigation was already there
+				$( this ).find( "." + navClass ).remove();
 				return $( this )
-					.append( "<nav class='"+ navClass +"'><a href='#prev' class='prev' aria-hidden='true' title='Previous'>Prev</a><a href='#next' class='next' aria-hidden='true' title='Next'>Next</a></nav>" )
+					.prepend( $( prevTemplate ).addClass( navClass ) )
+					.append( $( nextTemplate ).addClass( navClass ) )
 					[ pluginName ]( "_bindEventListeners" );
 			},
 
